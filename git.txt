@@ -15,7 +15,7 @@ git commit --message "can be abreviated to -m"
 git commit -am "shortcut for all, msg"
 git push origin master
 git push origin --all
-git pull origin --all
+git pull --all
 
 git rm deleteme.txt   #restaged - need to commit
 git mv old.file new.file
