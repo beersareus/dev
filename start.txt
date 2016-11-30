@@ -6,6 +6,7 @@ bower install jquery --save
 bower install bootstrap --save
 
 
+
 # testing
 npm install jasmine-core --save-dev
 bower install angular-mocks -S

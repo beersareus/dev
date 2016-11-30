@@ -13,10 +13,10 @@ $ git clone https://github.com/beersareus/dev.git
 
 git add index.html    # add file to git's database or 'git add .'  or 'git add --all'
 git commit --message "can be abreviated to -m"
-git commit -am "shortcut for all, msg"
+git commit -am "just backingup"
 git push origin master
 git push origin --all
-git push -all
+git push --all
 git pull --all
 
 git rm deleteme.txt   #restaged - need to commit
