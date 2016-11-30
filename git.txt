@@ -1,4 +1,5 @@
 beersareus plfflp@9
+ cd c:backup/lib/dev
 
 git config --list
 git config --global user.name "fraz"
