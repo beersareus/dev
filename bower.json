@@ -1,16 +1,19 @@
 {
-  "name": "dev",
-  "description": "dev project",
+  "name": "conFusion",
+  "version": "1.0.0",
+  "description": "Website for an awesome restaurant",
   "main": "index.html",
-  "authors": [
-    "fraz"
-  ],
-  "license": "ISC",
+  "moduleType": [],
   "keywords": [
-    "dev"
+    "conFusion",
+    "Fusion",
+    "Restaurant"
   ],
-  "homepage": "https://github.com/beersareus/dev",
-  "private": true,
+  "authors": [
+    "Jogesh Muppala"
+  ],
+  "license": "MIT",
+  "homepage": "",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -19,8 +22,12 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^3.1.1",
-    "bootstrap": "^3.3.7",
-    "font-awesome": "^4.7.0"
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0",
+    "angular": "~1.4.7",
+    "bootstrap-social": "^5.1.1"
+  },
+  "resolutions": {
+    "font-awesome": "~4.7"
   }
 }
