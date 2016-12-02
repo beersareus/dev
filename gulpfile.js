@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-	minifycss = require('gulp-minify-css'),
+	minifycss = require('gulp-clean-css'),
 	jshint = require('gulp-jshint'),
 	stylish = require('jshint-stylish'),
 	uglify = require('gulp-uglify'),
@@ -12,9 +12,8 @@ var gulp = require('gulp'),
 	changed = require('gulp-changed'),
 	rev = require('gulp-rev'),
 	browserSync = require('browser-sync'),
-	del = require('del');
-
-var ngannotate = require('gulp-ng-annotate');
+	del = require('del'),
+	ngannotate = require('gulp-ng-annotate');
 
 gulp.task('jshint', function() {
 	return gulp.src('app/scripts/**/*.js')

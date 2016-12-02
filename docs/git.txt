@@ -12,8 +12,9 @@ git init  # initialise a new git repository
 $ git clone https://github.com/beersareus/dev.git
 
 git add index.html    # add file to git's database or 'git add .'  or 'git add --all'
+git tag tag1	# tag current commit
 git commit --message "can be abreviated to -m"
-git commit -am "just backingup"
+git commit -am "shortcut for all, msg"
 git push origin master
 git push origin --all
 git push --all
@@ -26,3 +27,22 @@ git branch    #list branches
 git branch draft  # new branch called draft with the current commit image
 git checkout tmp  #change branches
 git checkout -b tmp #checkout and create a new branch at same time
+
+
+# delete commits
+$ git reset --hard HEAD~2	# moves the current branch backward by two commits,removing last 2 snapshots,only local
+$ git clean -f	# removes untracked files from your working directory. 
+
+
+# start again from a different commit but keep history, added a new commit to undo its changes
+git revert HEAD #undoes last commit
+$ git revert HEAD~2	#undo changes from last commit and appends a new commit with the resulting content
+$ git revert --abort
+
+forget1
+forget2
+
+
+
+
+
