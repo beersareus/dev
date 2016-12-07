@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-	minifycss = require('gulp-clean-css'),
+	minifycss = require('gulp-minify-css'),
 	jshint = require('gulp-jshint'),
 	stylish = require('jshint-stylish'),
 	uglify = require('gulp-uglify'),
@@ -15,10 +15,30 @@ var gulp = require('gulp'),
 	del = require('del'),
 	ngannotate = require('gulp-ng-annotate');
 
-gulp.task('jshint', function() {
-	return gulp.src('app/scripts/**/*.js')
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish));
+//setup - copy downloaded files to app directory
+gulp.task('setup', ['clean'], function() {
+	gulp.src('./bower_components/font-awesome/fonts/**/*.{ttf,woff,eof,svg}*')
+		.pipe(gulp.dest('./app/fonts'));
+	gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{ttf,woff,eof,svg}*')
+		.pipe(gulp.dest('./app/fonts'));
+	gulp.src('./bower_components/font-awesome/css/font-awesome.min.css')
+		.pipe(gulp.dest('./app/styles'));
+	gulp.src('./bower_components/bootstrap/dist/css/**/*.css')
+		.pipe(gulp.dest('./app/styles'));
+	gulp.src('./bower_components/bootstrap-social/*.css')
+		.pipe(gulp.dest('./app/styles'));
+	gulp.src(['./bower_components/jquery/dist/jquery.js', './bower_components/jquery/dist/jquery.min.js'])
+		.pipe(gulp.dest('./app/scripts'));
+	gulp.src('./bower_components/angular/angular.min.js')
+		.pipe(gulp.dest('./app/scripts'));
+	gulp.src('./bower_components/angular-ui-router/release/angular-ui-router.min.js')
+		.pipe(gulp.dest('./app/scripts'));
+	gulp.src('./bower_components/angular-resource/angular-resource.min.js')
+		.pipe(gulp.dest('./app/scripts'));
+	gulp.src('steps.txt')
+		.pipe(gulp.dest('./app/views'));
+	gulp.src('steps.txt')
+		.pipe(gulp.dest('./app/images'));
 });
 
 // Clean
@@ -26,21 +46,14 @@ gulp.task('clean', function() {
 	return del(['dist']);
 });
 
-// Default task
-gulp.task('default', ['clean'], function() {
-	gulp.start('usemin', 'imagemin', 'copyfonts');
+// jshint
+gulp.task('jshint', function() {
+	return gulp.src(['app/scripts/app.js', 'app/scripts/controllers.js', 'app/scripts/services.js'])
+		.pipe(jshint())
+		.pipe(jshint.reporter(stylish))
 });
 
-gulp.task('usemin', ['jshint'], function() {
-	return gulp.src('./app/**/*.html')
-		.pipe(usemin({
-			css: [minifycss(), rev()],
-			js: [ngannotate(), uglify(), rev()]
-		}))
-		.pipe(gulp.dest('dist/'));
-});
-
-// Images
+// minimise images
 gulp.task('imagemin', function() {
 	return del(['dist/images']), gulp.src('app/images/**/*')
 		.pipe(cache(imagemin({
@@ -48,43 +61,36 @@ gulp.task('imagemin', function() {
 			progressive: true,
 			interlaced: true
 		})))
-		.pipe(gulp.dest('dist/images'))
-		.pipe(notify({
-			message: 'Images task complete'
-		}));
+		.pipe(gulp.dest('dist/app/images'));
 });
 
-gulp.task('copyfonts', ['clean'], function() {
-	gulp.src('./bower_components/font-awesome/fonts/**/*.{ttf,woff,eof,svg}*')
-		.pipe(gulp.dest('./dist/fonts'));
-	gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{ttf,woff,eof,svg}*')
-		.pipe(gulp.dest('./dist/fonts'));
+// minimise
+gulp.task('usemin', function() {
+	return gulp.src('./app/**/*.html')
+		.pipe(usemin({
+			css: [minifycss(), rev()],
+			js: [ngannotate(), uglify(), rev()]
+		}))
+		.pipe(gulp.dest('dist/app/'));
 });
 
-// Watch
-gulp.task('watch', ['browser-sync'], function() {
-	// Watch .js files
-	gulp.watch('{app/scripts/**/*.js,app/styles/**/*.css,app/**/*.html}', ['usemin']);
-	// Watch image files
-	gulp.watch('app/images/**/*', ['imagemin']);
+// copy to dist
+gulp.task('copy', function() {
+	gulp.src('app/**/*.*')
+		.pipe(gulp.dest('dist/app/'));
+});
+
+// build
+gulp.task('build', ['clean', 'jshint', 'copy', 'imagemin'], function() {
 
 });
 
-gulp.task('browser-sync', ['default'], function() {
-	var files = [
-		'app/**/*.html',
-		'app/styles/**/*.css',
-		'app/images/**/*.png',
-		'app/scripts/**/*.js',
-		'dist/**/*'
-	];
+// Default task
+gulp.task('default', ['clean', 'jshint'], function() {
 
-	browserSync.init(files, {
-		server: {
-			baseDir: "dist",
-			index: "index.html"
-		}
-	});
-	// Watch any files in dist/, reload on change
-	gulp.watch(['dist/**']).on('change', browserSync.reload);
 });
+
+function handleError(err) {
+	console.log(err.toString());
+	this.emit('end');
+}
